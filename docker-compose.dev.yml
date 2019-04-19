@@ -1,5 +1,9 @@
 version: '3'
 
+volumes:
+  mysql:
+    driver: local
+
 services:
 
   nginx:
