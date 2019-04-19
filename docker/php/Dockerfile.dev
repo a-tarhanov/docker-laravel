@@ -28,6 +28,12 @@ ARG TZ=UTC
 ENV TZ ${TZ}
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+### Node JS ###
+
+RUN apt-get install -y curl software-properties-common
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get install -y nodejs
+
 ### Final ###
 
 COPY ./entrypoint.sh /
