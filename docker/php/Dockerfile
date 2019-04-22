@@ -3,8 +3,8 @@ FROM php:7.2-fpm
 ### PHP Extension ###
 
 RUN apt update \
-    && apt install -y libxml2-dev zlib1g-dev \
-    && docker-php-ext-install mbstring pdo pdo_mysql tokenizer xml bcmath zip
+    && apt install -y libxml2-dev zlib1g-dev libpng-dev \
+    && docker-php-ext-install mbstring pdo pdo_mysql tokenizer xml bcmath zip gd
 
 ### Composer ###
 
