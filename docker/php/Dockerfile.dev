@@ -37,6 +37,11 @@ RUN apt-get install -y curl software-properties-common
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
 
+### Opcache ###
+
+RUN docker-php-ext-install opcache
+COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+
 ### Final ###
 
 COPY ./entrypoint.sh /

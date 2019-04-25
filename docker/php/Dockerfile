@@ -26,6 +26,11 @@ ARG TZ=UTC
 ENV TZ ${TZ}
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+### Opcache ###
+
+RUN docker-php-ext-install opcache
+COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+
 ### Final ###
 
 COPY ./entrypoint.sh /
