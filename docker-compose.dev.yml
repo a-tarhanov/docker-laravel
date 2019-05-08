@@ -38,7 +38,9 @@ services:
       - mysql
 
   mysql:
-    image: mariadb
+    build:
+      context: docker/mysql
+      dockerfile: Dockerfile.dev
     volumes:
       - mysql:/var/lib/mysql
       - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
