@@ -18,7 +18,7 @@ services:
       args:
         - SERVER_NAME=${NGINX_SERVER_NAME}
     volumes:
-      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+      - ${APP_CODE_PATH}:/var/www/html
       - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
       - ${NGINX_SSL_PATH}:/etc/nginx/ssl
     ports:
