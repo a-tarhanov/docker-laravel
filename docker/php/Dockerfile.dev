@@ -2,9 +2,29 @@ FROM php:7.2-fpm
 
 ### PHP Extension ###
 
-RUN apt update \
-    && apt install -y libxml2-dev zlib1g-dev libjpeg-dev libpng-dev libfreetype6-dev \
-    && docker-php-ext-install mbstring pdo pdo_mysql tokenizer xml bcmath zip gd
+RUN apt update
+
+RUN apt install -y \
+    libxml2-dev \
+    zlib1g-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libfreetype6-dev
+
+RUN docker-php-ext-configure gd \
+    --with-freetype-dir=/usr/lib/x86_64-linux-gnu/ \
+    --with-jpeg-dir=/usr/lib/x86_64-linux-gnu/
+
+RUN docker-php-ext-install \
+    mbstring \
+    pdo \
+    pdo_mysql \
+    tokenizer \
+    xml \
+    bcmath \
+    zip \
+    gd \
+    exif
 
 ### XDebug ###
 
