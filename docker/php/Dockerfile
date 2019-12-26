@@ -9,33 +9,32 @@ RUN apt install -y \
     zlib1g-dev \
     libjpeg-dev \
     libpng-dev \
+    libwebp-dev \
     libfreetype6-dev
 
 RUN docker-php-ext-configure gd \
     --with-freetype-dir=/usr/lib/x86_64-linux-gnu/ \
+    --with-png-dir=/usr/lib/x86_64-linux-gnu/ \
+    --with-webp-dir=/usr/lib/x86_64-linux-gnu/ \
     --with-jpeg-dir=/usr/lib/x86_64-linux-gnu/
 
 RUN docker-php-ext-install \
     mbstring \
     pdo \
     pdo_mysql \
+    mysqli \
     tokenizer \
     xml \
     bcmath \
     zip \
     gd \
-    exif
+    exif \
+    pcntl
 
 ### Composer ###
 
 RUN curl -s http://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
-
-### Cron ###
-
-RUN apt install -y cron
-COPY ./crontab /etc/cron.d
-RUN chmod -R 0644 /etc/cron.d
 
 ### Timezone ###
 
@@ -48,8 +47,23 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN docker-php-ext-install opcache
 COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
+### Cron ###
+
+RUN apt install -y cron
+COPY ./crontab /etc/cron.d
+RUN chmod -R 0644 /etc/cron.d
+
+### Supervisor ###
+
+RUN apt install -y supervisor
+COPY ./supervisor.conf /etc/supervisor/supervisor.conf
+RUN chmod -R 0644 /etc/supervisor/supervisor.conf
+
 ### Final ###
 
-COPY ./entrypoint.sh /
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT /entrypoint.sh
+COPY ./user.ini /usr/local/etc/php/conf.d
+
+RUN groupmod -o -g 1000 www-data && \
+    usermod -o -u 1000 -g www-data www-data
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisor.conf"]
