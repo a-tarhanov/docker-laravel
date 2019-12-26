@@ -30,7 +30,5 @@ server {
     error_log /var/log/nginx/error.log;
     access_log /var/log/nginx/access.log;
 
-    location ~* \.(mp3|mp4|svg)$ {
-        add_header Access-Control-Allow-Origin *;
-    }
+    include include/*;
 }

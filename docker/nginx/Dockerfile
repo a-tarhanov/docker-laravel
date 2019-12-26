@@ -12,6 +12,7 @@ RUN set -x ; \
 
 COPY nginx.conf /etc/nginx/
 COPY app.template /etc/nginx/conf.d/
+COPY include /etc/nginx/include
 
 ARG SERVER_NAME
 ENV SERVER_NAME ${SERVER_NAME}
