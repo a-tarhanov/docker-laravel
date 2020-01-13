@@ -18,7 +18,7 @@ services:
       args:
         - SERVER_NAME=${NGINX_SERVER_NAME}
     volumes:
-      - ${APP_CODE_PATH}:/var/www/html
+      - ${APP_CODE_PATH}:/var/www/html:cached
       - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
       - ${NGINX_SSL_PATH}:/etc/nginx/ssl
     ports:
@@ -37,7 +37,7 @@ services:
       XDEBUG_CONFIG: "remote_host=host.docker.internal remote_enable=1"
       PHP_IDE_CONFIG: "serverName=Docker"
     volumes:
-      - ${APP_CODE_PATH}:/var/www/html
+      - ${APP_CODE_PATH}:/var/www/html:cached
     networks:
       - laravel
 
