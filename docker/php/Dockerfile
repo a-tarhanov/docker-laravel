@@ -1,22 +1,41 @@
-FROM php:7.2-fpm
+FROM php:7.4-fpm
 
-### PHP Extension ###
-
-RUN apt update
-
-RUN apt install -y \
+# Install dependencies
+RUN apt-get update
+RUN apt-get install -y \
+    build-essential \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libwebp-dev \
+    libfreetype6-dev \
+    jpegoptim \
+    optipng \
+    pngquant \
+    gifsicle \
     libxml2-dev \
     zlib1g-dev \
-    libjpeg-dev \
-    libpng-dev \
-    libwebp-dev \
-    libfreetype6-dev
+    libonig-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    locales \
+    vim \
+    git \
+    curl \
+    cron \
+    supervisor
 
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get install -y nodejs
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install extensions
 RUN docker-php-ext-configure gd \
-    --with-freetype-dir=/usr/lib/x86_64-linux-gnu/ \
-    --with-png-dir=/usr/lib/x86_64-linux-gnu/ \
-    --with-webp-dir=/usr/lib/x86_64-linux-gnu/ \
-    --with-jpeg-dir=/usr/lib/x86_64-linux-gnu/
+    --with-freetype=/usr/include/ \
+    --with-webp=/usr/include/ \
+    --with-jpeg=/usr/include/
 
 RUN docker-php-ext-install \
     mbstring \
@@ -29,40 +48,31 @@ RUN docker-php-ext-install \
     zip \
     gd \
     exif \
-    pcntl
+    pcntl \
+    opcache
 
-### Composer ###
-
+# Install composer
 RUN curl -s http://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
 
-### Timezone ###
-
+# Set Timezone
 ARG TZ=UTC
 ENV TZ ${TZ}
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-### Opcache ###
-
-RUN docker-php-ext-install opcache
+# PHP Config
+COPY ./user.ini /usr/local/etc/php/conf.d
 COPY ./opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
-### Cron ###
-
-RUN apt install -y cron
+# Crontab Config
 COPY ./crontab /etc/cron.d
 RUN chmod -R 0644 /etc/cron.d
 
-### Supervisor ###
-
-RUN apt install -y supervisor
+# Supervisor Config
 COPY ./supervisor.conf /etc/supervisor/supervisor.conf
 RUN chmod -R 0644 /etc/supervisor/supervisor.conf
 
-### Final ###
-
-COPY ./user.ini /usr/local/etc/php/conf.d
-
+# User Config
 RUN groupmod -o -g 1000 www-data && \
     usermod -o -u 1000 -g www-data www-data
 

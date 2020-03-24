@@ -12,11 +12,7 @@ cd docker-laravel
 Copy .env.example to .env
 
 ```bash
-# production
 docker-compose up --build -d
-
-# development
-docker-compose -f docker-compose.dev.yml up --build -d
 ```
 
 ## Create App
