@@ -16,6 +16,7 @@ services:
     build:
       context: docker/php
       args:
+        - PHP_CONTAINER_VERSION=${PHP_CONTAINER_VERSION}
         - TZ=${TIMEZONE}
     volumes:
       - ${APP_CODE_PATH}:/var/www/html:cached
