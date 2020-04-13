@@ -11,6 +11,8 @@ cd docker-laravel
 
 Copy .env.example to .env
 
+Copy docker/mysql/init/createdb.sql.example to docker/mysql/init/createdb.sql
+
 ```bash
 docker-compose up --build -d
 ```
