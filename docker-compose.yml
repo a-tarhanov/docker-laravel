@@ -1,14 +1,12 @@
 version: '3'
 
 volumes:
-  mysql:
-    driver: local
-  redis:
+
+  db:
     driver: local
 
-networks:
-  laravel:
-    driver: "bridge"
+  redis:
+    driver: local
 
 services:
 
@@ -20,8 +18,7 @@ services:
         - TZ=${TIMEZONE}
     volumes:
       - ${APP_CODE_PATH}:/var/www/html:cached
-    networks:
-      - laravel
+    restart: on-failure
 
   nginx:
     build:
@@ -36,38 +33,34 @@ services:
       - ${NGINX_HOST_HTTPS_PORT}:443
     depends_on:
       - php
-    networks:
-      - laravel
+    restart: on-failure
 
-  mysql:
-    build: docker/mysql
+  db:
+    build: docker/db
     environment:
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
       - TZ=${TIMEZONE}
     volumes:
-      - mysql:/var/lib/mysql
-      - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
-    networks:
-      - laravel
+      - db:/var/lib/mysql
+      - ${DB_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+    restart: on-failure
 
   redis:
     image: redis
     volumes:
       - redis:/data
-    networks:
-      - laravel
+    restart: on-failure
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
-      - PMA_HOST=mysql
+      - PMA_HOST=db
     volumes:
       - ${PMA_PHP_INI}:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
     ports:
       - ${PMA_PORT}:80
     depends_on:
-      - mysql
-    networks:
-      - laravel
+      - db
+    restart: on-failure
