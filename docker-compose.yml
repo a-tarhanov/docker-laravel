@@ -6,6 +6,17 @@ volumes:
 
 services:
 
+  db:
+    build: docker/db
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - TZ=${TIMEZONE}
+    volumes:
+      - db:/var/lib/mysql
+
   php:
     build:
       context: docker/php
@@ -14,6 +25,8 @@ services:
         - TZ=${TIMEZONE}
     volumes:
       - ${APP_CODE_PATH}:/var/www/html:cached
+    depends_on:
+      - db
 
   nginx:
     build:
@@ -30,17 +43,6 @@ services:
     depends_on:
       - php
 
-  db:
-    build: docker/db
-    environment:
-      - MYSQL_DATABASE=${DB_NAME}
-      - MYSQL_USER=${DB_USER}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      - TZ=${TIMEZONE}
-    volumes:
-      - db:/var/lib/mysql
-
   redis:
     image: redis
     volumes:
@@ -54,5 +56,3 @@ services:
       - ${PMA_PHP_INI}:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
     ports:
       - ${PMA_PORT}:80
-    depends_on:
-      - db
