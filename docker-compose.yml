@@ -1,12 +1,8 @@
 version: '3'
 
 volumes:
-
   db:
-    driver: local
-
   redis:
-    driver: local
 
 services:
 
@@ -38,13 +34,13 @@ services:
   db:
     build: docker/db
     environment:
+      - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${DB_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
       - TZ=${TIMEZONE}
     volumes:
       - db:/var/lib/mysql
-      - ${DB_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
     restart: on-failure
 
   redis:
