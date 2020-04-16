@@ -16,7 +16,7 @@ COPY nginx.conf /etc/nginx/
 COPY app.template /etc/nginx/conf.d/
 COPY include /etc/nginx/include
 
-ARG SERVER_NAME
+ARG SERVER_NAME=localhost
 ENV SERVER_NAME ${SERVER_NAME}
 RUN envsubst '\$SERVER_NAME' < /etc/nginx/conf.d/app.template > /etc/nginx/conf.d/default.conf
 
