@@ -17,8 +17,13 @@ COPY app.template /etc/nginx/conf.d/
 COPY include /etc/nginx/include
 
 ARG SERVER_NAME=localhost
+ARG PHP_HOST=php
+
 ENV SERVER_NAME ${SERVER_NAME}
+ENV PHP_HOST ${PHP_HOST}
+
 RUN envsubst '\$SERVER_NAME' < /etc/nginx/conf.d/app.template > /etc/nginx/conf.d/default.conf
+RUN envsubst '\$PHP_HOST' < /etc/nginx/conf.d/app.template > /etc/nginx/conf.d/default.conf
 
 ADD ./startup.sh /opt/startup.sh
 RUN sed -i 's/\r//g' /opt/startup.sh

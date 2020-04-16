@@ -21,6 +21,7 @@ services:
       context: docker/nginx
       args:
         - SERVER_NAME=${NGINX_SERVER_NAME}
+        - PHP_HOST=php
     volumes:
       - ${APP_CODE_PATH}:/var/www/html:cached
       - ${NGINX_SSL_PATH}:/etc/nginx/ssl
