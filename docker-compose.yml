@@ -14,7 +14,6 @@ services:
         - TZ=${TIMEZONE}
     volumes:
       - ${APP_CODE_PATH}:/var/www/html:cached
-    restart: on-failure
 
   nginx:
     build:
@@ -30,7 +29,6 @@ services:
       - ${NGINX_HOST_HTTPS_PORT}:443
     depends_on:
       - php
-    restart: on-failure
 
   db:
     build: docker/db
@@ -42,13 +40,11 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - db:/var/lib/mysql
-    restart: on-failure
 
   redis:
     image: redis
     volumes:
       - redis:/data
-    restart: on-failure
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -60,4 +56,3 @@ services:
       - ${PMA_PORT}:80
     depends_on:
       - db
-    restart: on-failure
