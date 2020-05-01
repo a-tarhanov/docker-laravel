@@ -5,9 +5,8 @@ volumes:
   redis:
 
 services:
-
   db:
-    build: docker/db
+    build: ./db
     environment:
       - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_USER=${DB_USER}
@@ -19,7 +18,7 @@ services:
 
   php:
     build:
-      context: docker/php
+      context: ./php
       args:
         - PHP_CONTAINER_VERSION=${PHP_CONTAINER_VERSION}
         - TZ=${TIMEZONE}
@@ -30,7 +29,7 @@ services:
 
   nginx:
     build:
-      context: docker/nginx
+      context: ./nginx
       args:
         - SERVER_NAME=${NGINX_SERVER_NAME}
         - PHP_HOST=php
