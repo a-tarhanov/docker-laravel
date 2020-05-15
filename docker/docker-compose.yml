@@ -1,7 +1,8 @@
 version: '3'
 
 volumes:
-  db:
+  mysql:
+  pgsql:
   redis:
 
 services:
@@ -27,7 +28,7 @@ services:
       - ${NGINX_HOST_HTTP_PORT}:80/tcp
       - ${NGINX_HOST_HTTPS_PORT}:443/tcp
 
-  db:
+  mysql:
     image: mysql
     command:
       - mysqld
@@ -37,23 +38,24 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
-      - db:/var/lib/mysql
+      - mysql:/var/lib/mysql
+
+  pgsql:
+    image: postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgsql:/var/lib/postgresql/data
 
   redis:
     image: redis
     volumes:
       - redis:/data
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    environment:
-      PMA_ARBITRARY: 1
-      PMA_HOST: db
-      PMA_USER: ${DB_USER}
-      PMA_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - ${PMA_PHP_INI}:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
+  adminer:
+    image: adminer
     ports:
-      - ${PMA_PORT}:80/tcp
+      - ${ADMINER_PORT}:8080/tcp

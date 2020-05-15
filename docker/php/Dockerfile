@@ -9,7 +9,7 @@ RUN apt-get install -y \
     build-essential \
     libpng-dev libjpeg62-turbo-dev libwebp-dev libfreetype6-dev \
     jpegoptim optipng pngquant gifsicle \
-    libxml2-dev zlib1g-dev libonig-dev libzip-dev \
+    libxml2-dev zlib1g-dev libonig-dev libzip-dev libpq-dev \
     zip unzip locales vim git curl cron supervisor
 
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
@@ -33,8 +33,8 @@ else \
 fi
 
 RUN docker-php-ext-install \
-    mbstring pdo pdo_mysql mysqli tokenizer \
-    xml bcmath zip gd exif pcntl opcache
+    pdo mysqli pdo_mysql pgsql pdo_pgsql \
+    mbstring tokenizer xml bcmath zip gd exif pcntl opcache
 
 # Install composer
 RUN curl -s http://getcomposer.org/installer | php && \
