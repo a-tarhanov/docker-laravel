@@ -10,8 +10,9 @@ RUN apt-get install -y \
     libpng-dev libjpeg62-turbo-dev libwebp-dev libfreetype6-dev \
     jpegoptim optipng pngquant gifsicle \
     libxml2-dev zlib1g-dev libonig-dev libzip-dev libpq-dev \
-    zip unzip locales vim git curl cron supervisor
+    zip unzip locales vim curl cron supervisor
 
+# Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
 
