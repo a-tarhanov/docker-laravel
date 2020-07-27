@@ -43,6 +43,12 @@ RUN docker-php-ext-install \
     pdo mysqli pdo_mysql pgsql pdo_pgsql \
     mbstring tokenizer xml bcmath zip gd exif pcntl opcache
 
+# Install XDebug
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+
+COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
 # Install composer
 RUN curl -s http://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
