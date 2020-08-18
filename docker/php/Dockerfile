@@ -1,7 +1,7 @@
-ARG PHP_CONTAINER_VERSION=7.2
+ARG PHP_CONTAINER_VERSION=7.4
 FROM php:${PHP_CONTAINER_VERSION}-fpm
 
-ARG PHP_CONTAINER_VERSION=7.2
+ARG PHP_CONTAINER_VERSION=7.4
 
 # Install dependencies
 RUN apt-get update
@@ -41,7 +41,12 @@ fi
 
 RUN docker-php-ext-install \
     pdo mysqli pdo_mysql pgsql pdo_pgsql \
-    mbstring tokenizer xml bcmath zip gd exif pcntl opcache
+    mbstring tokenizer xml bcmath zip gd exif pcntl opcache sockets
+
+# Install redis
+RUN pecl install -o -f redis && \
+    rm -rf /tmp/pear && \
+    docker-php-ext-enable redis
 
 # Install XDebug
 RUN pecl install xdebug
