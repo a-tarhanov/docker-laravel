@@ -8,7 +8,7 @@ RUN apt-get update
 RUN apt-get install -y \
     build-essential \
     libpng-dev libjpeg62-turbo-dev libwebp-dev libfreetype6-dev \
-    jpegoptim optipng pngquant gifsicle \
+    jpegoptim optipng pngquant gifsicle libmagickwand-dev imagemagick \
     libxml2-dev zlib1g-dev libonig-dev libzip-dev libpq-dev \
     zip unzip locales vim curl cron supervisor
 
@@ -47,6 +47,10 @@ RUN docker-php-ext-install \
 RUN pecl install -o -f redis && \
     rm -rf /tmp/pear && \
     docker-php-ext-enable redis
+
+# Install imagick
+RUN pecl install imagick && \
+    docker-php-ext-enable imagick
 
 # Install XDebug
 RUN pecl install xdebug
