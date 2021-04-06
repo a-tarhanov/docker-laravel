@@ -22,11 +22,8 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources
 RUN apt update
 RUN apt install -y yarn
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # Install extensions
-RUN if [ ${PHP_CONTAINER_VERSION} = 7.4 ]; then \
+RUN if [ ${PHP_CONTAINER_VERSION} = "7.4" ] || [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
     docker-php-ext-configure gd \
         --with-freetype=/usr/include/ \
         --with-webp=/usr/include/ \
@@ -49,18 +46,34 @@ RUN pecl install -o -f redis && \
     docker-php-ext-enable redis
 
 # Install imagick
-RUN pecl install imagick && \
+RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
+        apt-get install -y git && \
+        cd /tmp && \
+        git clone https://github.com/Imagick/imagick; \
+        cd imagick && \
+        phpize && \
+        ./configure && \
+        make && \
+        make install && \
+        rm -r /tmp/imagick; \
+    else \
+        pecl install imagick; \
+    fi && \
     docker-php-ext-enable imagick
 
 # Install XDebug
-RUN pecl install xdebug && \
-    docker-php-ext-enable xdebug
-
-COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+# This extension breaks opcache.jit
+# RUN pecl install xdebug && \
+#    docker-php-ext-enable xdebug
+#
+# COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Install composer
 RUN curl -s http://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set Timezone
 ARG TZ=UTC
