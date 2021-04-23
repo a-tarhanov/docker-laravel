@@ -13,7 +13,7 @@ RUN apt-get install -y \
     zip unzip locales vim curl cron supervisor
 
 # Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs
 
 # Install yarn
