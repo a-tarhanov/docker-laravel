@@ -63,10 +63,10 @@ RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
 
 # Install XDebug
 # This extension breaks opcache.jit
-# RUN pecl install xdebug && \
-#    docker-php-ext-enable xdebug
-#
-# COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+RUN pecl install xdebug && \
+   docker-php-ext-enable xdebug
+
+COPY ./xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Install composer
 RUN curl -s http://getcomposer.org/installer | php && \
