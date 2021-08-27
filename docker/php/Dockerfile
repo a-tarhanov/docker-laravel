@@ -62,7 +62,6 @@ RUN if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ]; then \
     docker-php-ext-enable imagick
 
 # Install XDebug
-# This extension breaks opcache.jit
 RUN pecl install xdebug && \
    docker-php-ext-enable xdebug
 
