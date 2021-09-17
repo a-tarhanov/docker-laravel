@@ -4,6 +4,9 @@ FROM php:${PHP_VERSION}-fpm
 # Update apt-get
 RUN apt-get update
 
+# Install opcache
+RUN docker-php-ext-install opcache
+
 # Install pdo
 RUN apt-get install -y libpq-dev
 RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql
