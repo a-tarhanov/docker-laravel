@@ -9,7 +9,7 @@ RUN docker-php-ext-install opcache
 
 # Install pdo
 RUN apt-get install -y libpq-dev
-RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql
+RUN docker-php-ext-install pdo mysqli pgsql pdo_mysql pdo_pgsql
 
 # Install mbstring
 RUN apt-get install -y libonig-dev
