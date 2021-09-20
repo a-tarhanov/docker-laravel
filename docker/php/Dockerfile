@@ -29,6 +29,9 @@ RUN docker-php-ext-install xml
 RUN apt-get install -y libzip-dev
 RUN docker-php-ext-install zip
 
+# Install sockets
+RUN docker-php-ext-install sockets
+
 # Install xdebug
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
