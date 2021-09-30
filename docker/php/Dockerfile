@@ -4,6 +4,12 @@ FROM php:${PHP_VERSION}-fpm
 # Update apt-get
 RUN apt-get update
 
+# Install git
+RUN apt-get install -y git
+
+# Install zip unzip
+RUN apt-get install -y zip unzip
+
 # Install opcache
 RUN docker-php-ext-install opcache
 
