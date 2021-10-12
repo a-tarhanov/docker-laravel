@@ -10,6 +10,8 @@ services:
     build: ./php
     volumes:
       - ../:/var/www/html:cached
+    extra_hosts:
+      - dockerhost:${DOCKER_HOST_IP}
 
   nginx:
     build: ./nginx
