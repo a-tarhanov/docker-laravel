@@ -38,6 +38,9 @@ RUN docker-php-ext-install zip
 # Install sockets
 RUN docker-php-ext-install sockets
 
+# Install exif
+RUN docker-php-ext-install exif
+
 # Install xdebug
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
@@ -85,7 +88,12 @@ COPY ./config/opcache.ini /usr/local/etc/php/conf.d
 COPY ./config/xdebug.ini /usr/local/etc/php/conf.d
 
 # Config user
-RUN groupmod -o -g 1000 www-data
-RUN usermod -o -u 1000 -g www-data www-data
+ARG PUID=1000
+ENV PUID ${PUID}
+ARG PGID=1000
+ENV PGID ${PGID}
+
+RUN groupmod -o -g ${PGID} www-data
+RUN usermod -o -u ${PUID} -g www-data www-data
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisor.conf"]
