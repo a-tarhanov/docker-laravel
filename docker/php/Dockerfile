@@ -15,7 +15,7 @@ RUN docker-php-ext-install opcache
 
 # Install pdo
 RUN apt-get install -y libpq-dev
-RUN docker-php-ext-install pdo mysqli pgsql pdo_mysql pdo_pgsql
+RUN docker-php-ext-install pdo pgsql pdo_pgsql
 
 # Install mbstring
 RUN apt-get install -y libonig-dev
@@ -83,9 +83,7 @@ COPY ./supervisor.conf /etc/supervisor/supervisor.conf
 RUN chmod -R 0644 /etc/supervisor/supervisor.conf
 
 # Config php
-COPY ./config/user.ini /usr/local/etc/php/conf.d
-COPY ./config/opcache.ini /usr/local/etc/php/conf.d
-COPY ./config/xdebug.ini /usr/local/etc/php/conf.d
+COPY ./php.ini /usr/local/etc/php/php.ini
 
 # Config user
 ARG PUID=1000
