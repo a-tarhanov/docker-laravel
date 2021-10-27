@@ -1,4 +1,4 @@
 FROM nginx:latest
 
-COPY ./default.conf /etc/nginx/conf.d
-COPY ./ssl /etc/nginx/ssl
+ENV PHP_HOST=php
+COPY ./templates /etc/nginx/templates/

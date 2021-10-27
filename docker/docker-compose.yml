@@ -6,7 +6,7 @@ volumes:
   redis:
 
 services:
-  php-fpm:
+  php:
     build: ./php
     volumes:
       - ../:/var/www/html:cached
@@ -17,6 +17,8 @@ services:
     build: ./nginx
     volumes:
       - ../:/var/www/html:cached
+      # - ./certs/localhost.pem:/etc/nginx/ssl/nginx.crt
+      # - ./certs/localhost-key.pem:/etc/nginx/ssl/nginx.key
     ports:
       - ${NGINX_HTTP_PORT}:80/tcp
       - ${NGINX_HTTPS_PORT}:443/tcp
