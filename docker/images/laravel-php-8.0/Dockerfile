@@ -1,5 +1,4 @@
-ARG PHP_VERSION=8.0
-FROM php:${PHP_VERSION}-fpm
+FROM php:8.0-fpm
 
 # Update apt-get
 RUN apt-get update
@@ -81,17 +80,5 @@ RUN chmod -R 0644 /etc/cron.d
 RUN apt-get install -y supervisor
 COPY ./supervisor.conf /etc/supervisor/supervisor.conf
 RUN chmod -R 0644 /etc/supervisor/supervisor.conf
-
-# Config php
-COPY ./php.ini /usr/local/etc/php/php.ini
-
-# Config user
-ARG PUID=1000
-ENV PUID ${PUID}
-ARG PGID=1000
-ENV PGID ${PGID}
-
-RUN groupmod -o -g ${PGID} www-data
-RUN usermod -o -u ${PUID} -g www-data www-data
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisor.conf"]

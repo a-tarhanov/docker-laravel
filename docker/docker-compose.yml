@@ -1,24 +1,30 @@
 version: '3'
 
 volumes:
-  mysql:
-  pgsql:
-  redis:
+  pgsql-data:
+  mysql-data:
+  mysql-files-data:
+  redis-data:
 
 services:
   php:
-    build: ./php
+    build: ./images/laravel-php-8.0
     volumes:
       - ../:/var/www/html:cached
+      - ./config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./config/php/supervisor.conf:/etc/supervisor/supervisor.conf
     extra_hosts:
       - dockerhost:${DOCKER_HOST_IP}
 
   nginx:
-    build: ./nginx
+    image: nginx
     volumes:
       - ../:/var/www/html:cached
-      # - ./certs/localhost.pem:/etc/nginx/ssl/nginx.crt
-      # - ./certs/localhost-key.pem:/etc/nginx/ssl/nginx.key
+      - ./config/nginx/default.conf.template:/etc/nginx/templates/default.conf.template
+      - ./certs/localhost.pem:/etc/nginx/ssl/nginx.crt
+      - ./certs/localhost-key.pem:/etc/nginx/ssl/nginx.key
+    environment:
+      - PHP_HOST=php
     ports:
       - ${NGINX_HTTP_PORT}:80/tcp
       - ${NGINX_HTTPS_PORT}:443/tcp
@@ -30,9 +36,26 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - pgsql:/var/lib/postgresql/data
+      - pgsql-data:/var/lib/postgresql/data
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - mysql-files-data:/var/lib/mysql-files
+      - ./config/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
 
   redis:
     image: redis
     volumes:
-      - redis:/data
+      - redis-data:/data
+
+  adminer:
+    image: adminer
+    ports:
+      - ${ADMINER_PORT}:8080/tcp
