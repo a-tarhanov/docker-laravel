@@ -14,7 +14,7 @@ RUN docker-php-ext-install opcache
 
 # Install pdo
 RUN apt-get install -y libpq-dev
-RUN docker-php-ext-install pdo pgsql pdo_pgsql
+RUN docker-php-ext-install pdo pgsql pdo_pgsql mysqli pdo_mysql
 
 # Install mbstring
 RUN apt-get install -y libonig-dev
@@ -39,6 +39,9 @@ RUN docker-php-ext-install sockets
 
 # Install exif
 RUN docker-php-ext-install exif
+
+# Install pcntl
+RUN docker-php-ext-install pcntl
 
 # Install xdebug
 RUN pecl install xdebug
