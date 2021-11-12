@@ -13,7 +13,6 @@ make install-project     # Install project
 ## Make Commands
 
 ```shell
-make install-certs       # Install local certificate
 make up                  # Up containers
 make stop                # Stop containers
 make restart             # Restart containers
@@ -24,4 +23,5 @@ make php-bash            # Login to bash php container
 make www-data            # Fix rights for www-data user
 make install-project     # Install project
 make update-project      # Update project
+make install-certs       # Install local certificate
 ```
