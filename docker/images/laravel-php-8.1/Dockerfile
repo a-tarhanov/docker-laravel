@@ -1,4 +1,4 @@
-FROM php:8.0-fpm
+FROM php:8.1-fpm
 
 # Update apt-get
 RUN apt-get update
@@ -22,9 +22,6 @@ RUN docker-php-ext-install mbstring
 
 # Install bcmath
 RUN docker-php-ext-install bcmath
-
-# Install tokenizer
-RUN docker-php-ext-install tokenizer
 
 # Install xml
 RUN apt-get install -y libxml2-dev
