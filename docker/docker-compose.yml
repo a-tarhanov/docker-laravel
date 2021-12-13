@@ -8,11 +8,10 @@ volumes:
 
 services:
   php:
-    build: ./images/laravel-php-8.1
+    build: ./images/php/8.1-laravel
     volumes:
       - ../:/var/www/html:cached
       - ./config/php/php.ini:/usr/local/etc/php/php.ini
-      - ./config/php/supervisor.conf:/etc/supervisor/supervisor.conf
     extra_hosts:
       - dockerhost:${DOCKER_HOST_IP}
 

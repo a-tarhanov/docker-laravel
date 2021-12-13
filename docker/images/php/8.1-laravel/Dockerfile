@@ -56,9 +56,9 @@ RUN docker-php-ext-enable redis
 # Install gd
 RUN apt-get install -y zlib1g-dev libpng-dev libwebp-dev libjpeg62-turbo-dev libfreetype6-dev
 RUN docker-php-ext-configure gd \
-    --with-freetype=/usr/include/ \
-    --with-webp=/usr/include/ \
-    --with-jpeg=/usr/include/;
+   --with-freetype=/usr/include/ \
+   --with-webp=/usr/include/ \
+   --with-jpeg=/usr/include/;
 RUN docker-php-ext-install gd
 
 # Install nodejs
@@ -73,12 +73,10 @@ RUN apt install -y yarn
 
 # Install crontab
 RUN apt-get install -y cron
-COPY ./crontab /etc/cron.d
-RUN chmod -R 0644 /etc/cron.d
+COPY ./crontab /etc/cron.d/root
+RUN chmod 0644 /etc/cron.d/root
 
-# Install supervisor
-RUN apt-get install -y supervisor
-COPY ./supervisor.conf /etc/supervisor/supervisor.conf
-RUN chmod -R 0644 /etc/supervisor/supervisor.conf
-
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisor.conf"]
+# Setup entrypoint
+COPY ./entrypoint.sh /
+RUN chmod 0755 /entrypoint.sh
+ENTRYPOINT /entrypoint.sh
