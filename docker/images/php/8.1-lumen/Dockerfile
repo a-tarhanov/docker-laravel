@@ -24,6 +24,9 @@ RUN docker-php-ext-install mbstring
 RUN apt-get install -y libzip-dev
 RUN docker-php-ext-install zip
 
+# Install exif
+RUN docker-php-ext-install exif
+
 # Install xdebug
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
@@ -45,12 +48,7 @@ RUN docker-php-ext-configure gd \
    --with-jpeg=/usr/include/;
 RUN docker-php-ext-install gd
 
-# Install crontab
+# Install cron
 RUN apt-get install -y cron
-COPY ./crontab /etc/cron.d/root
+RUN echo "* * * * * root /usr/local/bin/php /var/www/html/artisan schedule:run >> /dev/null 2>&1" | tee /etc/cron.d/root
 RUN chmod 0644 /etc/cron.d/root
-
-# Setup entrypoint
-COPY ./entrypoint.sh /
-RUN chmod 0755 /entrypoint.sh
-ENTRYPOINT /entrypoint.sh

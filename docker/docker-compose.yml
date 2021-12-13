@@ -15,6 +15,18 @@ services:
     extra_hosts:
       - dockerhost:${DOCKER_HOST_IP}
 
+  scheduler:
+    build: ./images/php/8.1-laravel
+    entrypoint: "cron -f"
+    volumes:
+      - ../:/var/www/html:cached
+
+  worker:
+    build: ./images/php/8.1-laravel
+    command: "php artisan queue:work"
+    volumes:
+      - ../:/var/www/html:cached
+
   nginx:
     image: nginx
     volumes:

@@ -71,12 +71,7 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources
 RUN apt update
 RUN apt install -y yarn
 
-# Install crontab
+# Install cron
 RUN apt-get install -y cron
-COPY ./crontab /etc/cron.d/root
+RUN echo "* * * * * root /usr/local/bin/php /var/www/html/artisan schedule:run >> /dev/null 2>&1" | tee /etc/cron.d/root
 RUN chmod 0644 /etc/cron.d/root
-
-# Setup entrypoint
-COPY ./entrypoint.sh /
-RUN chmod 0755 /entrypoint.sh
-ENTRYPOINT /entrypoint.sh
