@@ -8,7 +8,7 @@ volumes:
 
 services:
   php:
-    build: ./images/php/8.1-laravel
+    build: ./images/laravel/8.1-fpm
     volumes:
       - ../:/var/www/html:cached
       - ./config/php/php.ini:/usr/local/etc/php/php.ini
@@ -16,13 +16,16 @@ services:
       - dockerhost:${DOCKER_HOST_IP}
 
   scheduler:
-    build: ./images/php/8.1-laravel
+    restart: unless-stopped
+    build: ./images/laravel/8.1-cli
     entrypoint: "cron -f"
     volumes:
       - ../:/var/www/html:cached
 
   worker:
-    build: ./images/php/8.1-laravel
+    restart: unless-stopped
+    build: ./images/laravel/8.1-cli
+    working_dir: "/var/www/html"
     command: "php artisan queue:work"
     volumes:
       - ../:/var/www/html:cached
