@@ -9,8 +9,7 @@ RUN apt-get update && \
         libonig-dev \
         libzip-dev  \
         zlib1g-dev libpng-dev libwebp-dev libjpeg62-turbo-dev libfreetype6-dev \
-        cron && \
-    pecl install -o -f redis
+        cron
 
 # Install extensions
 RUN docker-php-ext-configure gd \
@@ -24,7 +23,10 @@ RUN docker-php-ext-configure gd \
         zip \
         sockets \
         exif \
-        gd && \
+        gd
+
+# Install redis
+RUN pecl install redis && \
     docker-php-ext-enable redis
 
 # Install xdebug

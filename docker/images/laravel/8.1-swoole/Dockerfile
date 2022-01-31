@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.1-cli
 
 # Install dependencies
 RUN apt-get update && \
@@ -33,9 +33,9 @@ RUN docker-php-ext-configure gd \
 RUN pecl install redis && \
     docker-php-ext-enable redis
 
-# Install xdebug
-RUN pecl install xdebug && \
-    docker-php-ext-enable xdebug
+# Install swoole
+RUN pecl install swoole && \
+    docker-php-ext-enable swoole
 
 # Install composer
 RUN curl -s http://getcomposer.org/installer | php && \
