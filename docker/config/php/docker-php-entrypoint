@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+# setup user
+if [ -n "$PUID" ] && [ -n "$PGID" ]; then
+    groupmod -g "$PGID" www-data
+    usermod -u "$PUID" -g www-data www-data
+    chown -R www-data:www-data /var/www
+fi
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+    set -- php-fpm "$@"
+fi
+
+exec "$@"
