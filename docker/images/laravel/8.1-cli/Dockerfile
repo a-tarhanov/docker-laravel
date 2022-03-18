@@ -33,6 +33,23 @@ RUN docker-php-ext-configure gd \
 RUN pecl install redis && \
     docker-php-ext-enable redis
 
+# Install xdebug
+RUN pecl install xdebug && \
+    docker-php-ext-enable xdebug
+
+# Install composer
+RUN curl -s http://getcomposer.org/installer | php && \
+    mv composer.phar /usr/local/bin/composer
+
+# Install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+    apt-get install -y nodejs
+
+# Install yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get update && apt-get install -y yarn
+
 # Setup cron
 RUN echo "* * * * * root /usr/local/bin/php /var/www/html/artisan schedule:run >> /dev/null 2>&1" | tee /etc/cron.d/root && \
     chmod 0644 /etc/cron.d/root

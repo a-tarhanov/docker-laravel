@@ -21,14 +21,14 @@ services:
 
   scheduler:
     restart: unless-stopped
-    build: ./images/laravel/8.1-cli
-    entrypoint: "cron -f"
+    build: starhanov/laravel:8.1-cli
+    command: "cron -f"
     volumes:
       - ../:/var/www/html:cached
 
   worker:
     restart: unless-stopped
-    build: ./images/laravel/8.1-cli
+    build: starhanov/laravel:8.1-cli
     working_dir: "/var/www/html"
     command: "php artisan queue:work"
     volumes:
