@@ -19,13 +19,6 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
 
-  scheduler:
-    restart: unless-stopped
-    build: starhanov/laravel:8.1-cli
-    command: "cron -f"
-    volumes:
-      - ../:/var/www/html:cached
-
   worker:
     restart: unless-stopped
     build: starhanov/laravel:8.1-cli
