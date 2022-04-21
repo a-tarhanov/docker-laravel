@@ -9,6 +9,7 @@ RUN apk add --no-cache \
     make \
     nodejs \
     npm \
+    shadow \
     yarn
 
 # Install php extensions
