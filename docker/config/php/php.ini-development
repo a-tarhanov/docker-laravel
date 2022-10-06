@@ -1,0 +1,16 @@
+[php]
+memory_limit = 256M
+error_reporting = E_ALL
+display_errors = On
+display_startup_errors = On
+
+[opcache]
+opcache.enable = 1
+opcache.enable_cli = 1
+
+[xdebug]
+xdebug.mode = debug
+xdebug.client_host = dockerhost
+xdebug.start_with_request = yes
+xdebug.idekey = PHPSTORM
+xdebug.log_level = 0

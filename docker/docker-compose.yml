@@ -11,7 +11,7 @@ services:
     image: starhanov/laravel:8.1-fpm
     volumes:
       - ../:/var/www/html:cached
-      - ./config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./config/php/php.ini-development:/usr/local/etc/php/php.ini
       - ./config/default/php/docker-php-entrypoint:/usr/local/bin/docker-php-entrypoint
     extra_hosts:
       - dockerhost:${DOCKER_HOST_IP}

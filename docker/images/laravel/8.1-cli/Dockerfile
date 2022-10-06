@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     bash \
     curl \
     git \
+    postgresql-client \
     make \
     nodejs \
     npm \
@@ -27,10 +28,12 @@ RUN install-php-extensions \
     pcntl \
     pdo_mysql \
     pdo_pgsql \
+    pgsql \
     redis \
     soap \
     sockets \
     xdebug \
+    xdebug-stable \
     zip
 
 # Clean up
